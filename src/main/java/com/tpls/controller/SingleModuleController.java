@@ -67,9 +67,22 @@ public class SingleModuleController {
             String filePath = fileUploadDir +  "/" + originalName; // 文件
             file.transferTo(new File(filePath).getAbsoluteFile());
 
+            // 检查文件是否存在
+            File uploadedFile = new File(filePath);
+            if (uploadedFile.exists()) {
+                // 文件上传成功
+                System.out.println("文件上传成功！");
+                // 在这里可以继续执行其他操作
+            } else {
+                // 文件上传失败
+                System.out.println("文件上传失败！");
+            }
+
             Map<String,String> res=new HashMap<>();
             res.put("fileDir",fileUploadDir);
             res.put("url","/upload/" + parentDir + "/" + originalName);
+
+            System.out.println("========================");
 
             return new JsonResult<>(res); // 返回前后端Url
 

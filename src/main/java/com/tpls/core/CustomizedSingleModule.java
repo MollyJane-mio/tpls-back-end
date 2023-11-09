@@ -16,7 +16,7 @@ public class CustomizedSingleModule extends SingleModule {
     private String selectedGroupId;
     private String selectedArtifactId;
     private String selectedVersion;
-    private String opr;    // 用户选择的运算符
+    private String selectedOpr;    // 用户选择的运算符
 
     public String getSelectedGroupId() {
         return selectedGroupId;
@@ -34,12 +34,12 @@ public class CustomizedSingleModule extends SingleModule {
         this.selectedArtifactId = selectedArtifactId;
     }
 
-    public String getOpr() {
-        return opr;
+    public String getSelectedOpr() {
+        return selectedOpr;
     }
 
-    public void setOpr(String opr) {
-        this.opr = opr;
+    public void setSelectedOpr(String selectedOpr) {
+        this.selectedOpr = selectedOpr;
     }
 
     public String getSelectedVersion() {
@@ -55,7 +55,7 @@ public class CustomizedSingleModule extends SingleModule {
         selectedGroupId = "";
         selectedArtifactId = "";
         selectedVersion = "";
-        opr = "";
+        selectedOpr = "";
         recommendDepSet = new ArrayList<>();
         resToMediate = new ArrayList<>();
         resWithoutConflict = new ArrayList<>();
@@ -67,7 +67,7 @@ public class CustomizedSingleModule extends SingleModule {
         selectedGroupId = "";
         selectedArtifactId = "";
         selectedVersion = "";
-        opr = "";
+        selectedOpr = "";
         recommendDepSet = new ArrayList<>();
         resToMediate = new ArrayList<>();
         resWithoutConflict = new ArrayList<>();
@@ -181,6 +181,14 @@ public class CustomizedSingleModule extends SingleModule {
     public List<List<Dependency>> getCustomizedUpgradeSolutions(String projectPath, int type,
                                                                 String groupId, String artifactId,
                                                                 String opr, String version) {
+        selectedGroupId = "";
+        selectedArtifactId = "";
+        selectedVersion = "";
+        selectedOpr = "";
+        recommendDepSet = new ArrayList<>();
+        resToMediate = new ArrayList<>();
+        resWithoutConflict = new ArrayList<>();
+        resultSet = new ArrayList<>();
         // 首先 set等等
         setProjectPath(projectPath);
         setType(type);
@@ -188,15 +196,8 @@ public class CustomizedSingleModule extends SingleModule {
         setSelectedGroupId(groupId);
         setSelectedArtifactId(artifactId);
         setSelectedVersion(version);
-        setOpr(opr);
-        selectedGroupId = "";
-        selectedArtifactId = "";
-        selectedVersion = "";
-        opr = "";
-        recommendDepSet = new ArrayList<>();
-        resToMediate = new ArrayList<>();
-        resWithoutConflict = new ArrayList<>();
-        resultSet = new ArrayList<>();
+        setSelectedOpr(opr);
+
         boolean isConflictBefore = conflictDetectBefore();
         if (!isConflictBefore) {
             //如果原项目没有冲突，加入无冲突集合
@@ -242,7 +243,7 @@ public class CustomizedSingleModule extends SingleModule {
                 // 先获取groupId + artifactId 下的全部版本
                 allVersions = jdbc.getLibAllVersions(selectedGroupId, selectedArtifactId);
                 // 提取出遵守用户自定义(opr selectedVersion)的依赖列表
-                allVersions = getCustomizedDeps(selectedVersion, opr, allVersions); //返回的是满足依赖约束的versions
+                allVersions = getCustomizedDeps(selectedVersion, selectedOpr, allVersions); //返回的是满足依赖约束的versions
             }
             else{
                 //没有约束的，在t_lib中找到这个依赖的全部组合
